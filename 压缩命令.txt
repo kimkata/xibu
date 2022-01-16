@@ -1,0 +1,2 @@
+在git-bash中使用命令:
+gzip -9k *.png
