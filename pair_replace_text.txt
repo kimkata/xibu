@@ -2,12 +2,12 @@
     <a href="#aaa">aaa</a>
 </li>
 <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-<hr>
+<a href="#header"><hr></a>
 <div class="sect1">
     <h2 id="aaa">aaa</h2>
     <div id="gitweb" class="imageblock">
         <div class="content">
-            <img src="images/aaa.png" alt="aaa" height="200" width="300">
+            <img src="images/aaa.png" height="200" width="200">
         </div>
     </div>
 </div>
