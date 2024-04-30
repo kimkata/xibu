@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="rebots" content="noindex,nofollow"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mqtt</title>
+  <script src="mqtt.min.js"></script>
+  <style type="text/css">
+    .btn {
+      margin-top: 10px;
+      margin-left: 10px;
+      min-width: 150px;
+      min-height: 35px;
+    }
+
+    .btn_ipv6 {
+      margin-top: 10px;
+      margin-left: 10px;
+      min-width: 150px;
+      min-height: 35px;
+    }
+
+    .text {
+      margin-top: 10px;
+      margin-left: 10px;
+      min-width: 30px;
+      min-height: 25px;
+      max-width: 75px;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+      <h3>MeetingTimer计时软件控制网页</h3>
+      <h4 style="color:blue;" id="display_ipv6">wss://broker.emqx.io:8084/mqtt</h4>
+      <div>
+        <span style="margin-left: 10px;">倒计时:</span>
+        <input type="text" class="text" id="timer_input" value="20">
+        <input type="button" class="btn" value="设置倒计时(分)" onclick="set_timer();">
+      </div>
+      <div>
+        <input type="button" class="btn" value="开始计时" onclick="publish_message('gobaba_and_kimkat_meetings_timer/exampletopic', 'start');">
+        <input type="button" class="btn" value="暂停计时" onclick="publish_message('gobaba_and_kimkat_meetings_timer/exampletopic', 'pause');">
+      </div>
+      <div>
+        <input type="button" class="btn" value="停止计时" onclick="publish_message('gobaba_and_kimkat_meetings_timer/exampletopic', 'stop');">
+        <input type="button" class="btn" value="复位计时" onclick="publish_message('gobaba_and_kimkat_meetings_timer/exampletopic', 'reset');">
+      </div>
+
+
+      <div id = "display" style="margin-top: 20px;margin-left: 10px;"></div>
+<script>
+    const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+    const host = 'wss://broker.emqx.io:8084/mqtt'
+    const options = {
+      keepalive: 60*10,
+      clientId: clientId,
+      protocolId: 'MQTT',
+      protocolVersion: 4,
+      clean: true,
+      reconnectPeriod: 1000,
+      connectTimeout: 30 * 1000,
+      will: {
+        topic: 'WillMsg',
+        payload: 'Connection Closed abnormally..!',
+        qos: 0,
+        retain: true
+      },
+    }
+    console.log('Connecting mqtt client')
+    const client = mqtt.connect(host, options);
+
+
+    var topics_subsribe = ['gobaba_and_kimkat_meetings_timer/exampletopic_res'];
+
+    topics_subsribe.forEach(function(e){
+        client.subscribe(e, { qos: 0 }, function (error, granted) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(`${granted[0].topic} was subscribed`);
+        }
+        });
+    });
+
+    client.on('message', function (topic, payload, packet) {
+        console.log(topic);
+        if(topic == topics_subsribe[0]){
+            console.log(`Topic: ${topic}, Message: ${payload.toString()}, QoS: ${packet.qos}`);
+            document.querySelector("#display").innerText += '\n收到消息: ' + payload.toString();
+        }
+    })
+
+    client.on('connect', function (connack) {
+      console.log('Connected');
+      document.querySelector("#display").innerText = '已经连接到mqtt服务器...';
+    })
+
+    client.on('reconnect', () => {
+      console.log('Reconnecting...')
+      document.querySelector("#display").innerText = 'Reconnecting...';
+    })
+
+    client.on('close', function () {
+      console.log('Disconnected');
+      document.querySelector("#display").innerText = 'Disconnected';
+    })
+
+    client.on('disconnect', function (packet) {
+      console.log(packet)
+    })
+
+    client.on('offline', function () {
+      console.log('offline');
+      document.querySelector("#display").innerText = 'offline';
+    })
+
+    client.on('error', (err) => {
+      console.log('Connection error: ', err)
+      document.querySelector("#display").innerText = 'Connection error: ' + err;
+      client.end()
+    })
+
+    function publish_message(topic,payload) {
+        client.publish(topic, payload, { qos: 0, retain: false }, function (error) {
+          if (error) {
+            console.log(error)
+          } else {
+            console.log('Published:',payload);
+            document.querySelector("#display").innerText = '消息发布成功: ' + payload;
+          }
+        })
+    }
+
+    function set_timer() {
+      var time_to_set_min = document.querySelector("#timer_input").value;
+      publish_message('gobaba_and_kimkat_meetings_timer/exampletopic', time_to_set_min);
+    }
+</script>
+
+<script>
+  function copy_function(obj) {
+      let content = obj.value;
+      navigator.clipboard.writeText(content);
+      document.querySelector("#display_ipv6").innerHTML = content;
+      document.querySelectorAll(".btn_ipv6").forEach(function (e){
+          e.style.color='blue';
+      });
+      obj.style = "color:red;"
+  }
+  </script>
+</body>
+</html>
+

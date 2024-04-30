@@ -1,0 +1,46 @@
+
+body {
+	text-align: center;
+	#color: #1a1a1a;
+	font-family: arial, Arial, 'Microsoft Yahei',Tahoma, Helvetica;
+	font-size: 15px;
+	line-height: 1.67;
+}
+
+
+li.title{
+	float:left;
+	margin:0 5px;
+	margin-bottom: 5px;
+	list-style:none;
+	text-decoration: none;
+	line-height: 2;
+}
+
+
+div {
+	font-size: 14px;
+	font-family: arial
+}
+
+
+span.go_to_index{
+	float: left;
+	font-size: 10px;
+}
+
+select {
+	height: 23px;
+}
+
+body {
+	background-color: #ffe;
+}
+
+hr {
+	border: 1px dashed blueviolet;
+}
+
+textarea {
+	border: 2px solid coral !important;
+}

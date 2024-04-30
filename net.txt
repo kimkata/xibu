@@ -1,0 +1,93 @@
+schtasks /create /ru SYSTEM /sc minute /tn update_ipv4 /tr "curl.exe http://gobaba.tpddns.cn:5000/api/showip?name=xx"
+schtasks /delete /tn update_ipv4
+
+
+curl -X GET -H "Authorization: token ousWrG60N6NnjfXhFmrx3Nm804XkqwmU" https://api.zerotier.com/api/v1/network/af415e486f430b78/member
+curl -X GET -H "Authorization: token ousWrG60N6NnjfXhFmrx3Nm804XkqwmU" https://api.zerotier.com/api/v1/network/af415e486f430b78/member/cbc6630479
+
+#######################################################################################
+远程开机:
+http://gobaba.tpddns.cn:3000/wol/98-EE-CB-9B-2B-B3?name=chenhua
+http://gobaba.tpddns.cn:3000/wol/F4-6B-8C-8D-A1-36?name=wangruiqi
+http://gobaba.tpddns.cn:3000/wol/98-EE-CB-9B-2A-02?name=office-lenovo-pc
+http://gobaba.tpddns.cn:5500/wol/A4-1F-72-4D-B5-97?name=home-ubuntu-server
+http://gobaba.tpddns.cn:5500/wol/00-E0-4C-66-67-DE?name=home-sama
+
+IPV6 + FRP相关设置：
+办公室服务器地址:tsl6.gobaba.xyz 端口号:5666
+office-lenovo-pc:
+             rdp: 5889 -> 3389
+			 ssh: 5922 -> 22
+			 
+家里服务器地址:ipv6.gobaba.xyz 端口号:7000
+sama-home-pc:
+			rdp: 5489 -> 3389
+			ssh: 5422 -> 22
+			
+home-ubuntu:
+			ssh: 5622 -> 22
+
+#######################################################################################
+frp相关设置:
+服务器地址:gobaba.tpddns.cn:5666
+sama-home-pc:
+	ssh: 5422 -> 22
+	rdp: 5489 -> 3389
+	
+pi4b:
+	ssh 5822 -> 22
+	
+pi3b:
+	ssh  5522 -> 22
+	
+pi3b-uploader:
+	5500 -> 3000
+
+tplink-router:
+    5880 -> 10.10.10.1:80
+
+办公室网络代理:http gobaba.tpddns.cn 5566  / socks5 gobaba.tpddns.cn 5588
+家庭网络代理:  http gobaba.tpddns.cn 5234  /socks5 gobaba.tpddns.cn 5233
+
+#################### 端口可能会与frp冲突，所以不要使用同一个端口段 #####################
+rathole相关设置:
+服务器地址:gobaba.tpddns.cn:5555
+sama-home-pc:
+	ssh: 5322 -> 22
+	rdp: 5389 -> 3389
+
+pi3b:
+	ssh: 5222 -> 22
+
+home-ubuntu:
+	ssh: 5022 -> 22
+
+tplink-router:
+	web:5888 ->10.10.10.1:80
+
+
+#######################################################################################
+zerotier-one相关设置:
+
+Network ID: af415e486f430b78
+
+508-lenovo-pc: 172.28.130.214
+
+pi4b:172.28.182.63
+
+pi3b: 172.28.208.18
+
+huawei-plus: 172.28.210.190
+
+sama-home-pc: 172.28.185.116
+
+ubuntu-home-dell: 172.28.120.95
+
+fujistu:172.28.199.132
+
+r4s:172.28.67.215
+#########################################################################################
+win10如何删除远程电脑的ip
+1.如何清除远程桌面连接IP域名信息
+首先运行regedit，打开注册表，找到HKEY_CURRENT_USER/Software/Microsoft/Terminal Server Client/Default 右边的那些键值就记录了IP或者域名。
+另外最后一次连接的IP或者域名还是会显示在远程桌面连接的连接目标输入框上面，这个信息储存在“我的文档”下的“Default.rdp”文件中，删之即可。

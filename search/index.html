@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="rebots" content="noindex,nofollow"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/map520.css">
+    <script type="text/javascript" src="../javascript/clipboard.min.js"></script>
+    <title>终端信息查询</title>
+</head>
+
+<body>
+    <h3>西区终端信息查询</h3>
+    <h4>网页打包日期:<span id="dataday">0000-00-00</span></h4>
+    <div>
+        <button style="width: 40px;height: 25px;" onclick="insertAtCursor(document.getElementById('keywords'),'^');">^</button>
+        <button style="width: 40px;height: 25px;" onclick="insertAtCursor(document.getElementById('keywords'),'.*');">.*</button>
+        <button style="width: 40px;height: 25px;" onclick="insertAtCursor(document.getElementById('keywords'),'.?');">.?</button>
+        <button style="width: 40px;height: 25px;" onclick="insertAtCursor(document.getElementById('keywords'),'$');">$</button>
+        <button style="width: 40px;height: 25px;" onclick="insertAtCursor(document.getElementById('keywords'),'|');">|</button>   
+        <button style="width: 50px;height: 25px;" onclick="document.querySelector('#keywords').value='';">清空</button>
+        <button style="width: 50px;height: 25px;" onclick="search_item(2);">搜ID</button>
+    </div>
+    <div class="search" style="margin-top:5px;">
+        <input type="text" name="keywords" id="keywords" placeholder="输入关键字/正则表达式" style="width: 60%;height: 20px;"></input>
+        <button style="width: 75px;height: 25px;" onclick="search_item(1);">搜索名称</button>  
+             
+    </div>
+    <div id="output_count"></div>
+
+    <hr style="border: 1px dashed blueviolet;">
+
+    <div id="showResults" style="margin-top: 10px;"></div>
+
+    <div>
+        <p>使用说明:</p>
+        <p>1、本网页可以根据终端名称或终端别名中的关键字搜索CRM系统终端ID和名称;</p>
+        <p>2、点击序号中的数字按钮，可以直接把终端ID和终端名称复制到剪贴板,直接在EXCEL中粘贴;</p>
+        <p>3、可以输入关键字,也可以输入正则表达式;</p>
+    </div>
+
+<script type="module">
+  import init, {get_hello,get_dataday,search_kimkat_data} from './wasm_search.js';
+  async function run() {
+    await init();
+    window.get_hello = get_hello;
+    window.get_datadays = get_dataday;
+    window.search_kimkat_data = search_kimkat_data;
+    var dataday = (new TextDecoder("utf-8")).decode(get_datadays());
+    document.querySelector("#dataday").innerHTML = dataday;
+  }
+  run();
+</script>
+
+<script>
+    function search_item(search_mode) {
+        var search_keywords = document.querySelector('#keywords').value;        
+        if (/^\s*$/.test(search_keywords)) {
+            alert('请输入搜索关键词,不能为空白字符...');
+            return;
+        }
+
+        var result = (new TextDecoder("utf-8")).decode(search_kimkat_data((new TextEncoder("utf-8")).encode(search_keywords),search_mode));
+        document.querySelector("#showResults").innerHTML = result;
+
+        // document.querySelector("#output_count").innerHTML = "<p>搜索到<font style='color:red;'>"+ data_result.length +"</font>个结果</p>";
+    }
+
+</script>
+
+
+<script>
+    var clipboard = new ClipboardJS('.copy_btn');
+    clipboard.on('success', function (e) {
+        document.querySelectorAll(".copy_btn").forEach(function (item) {
+            if (item.style.color != 'blue') { item.style.color = 'blue'; }
+        });
+        e.trigger.style.color = 'red';
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function (e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+</script>
+
+<script type="text/javascript">
+    function insertAtCursor(myField, myValue) {
+
+    //IE 浏览器
+    if (document.selection) {
+     myField.focus();
+     sel = document.selection.createRange();
+     sel.text = myValue;
+     sel.select();
+    }
+
+    //FireFox、Chrome等
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+     var startPos = myField.selectionStart;
+     var endPos = myField.selectionEnd;
+
+     // 保存滚动条
+     var restoreTop = myField.scrollTop;
+     myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+     
+     if (restoreTop > 0) {
+        myField.scrollTop = restoreTop;
+     }
+     
+     myField.focus();
+     myField.selectionStart = startPos + myValue.length;
+     myField.selectionEnd = startPos + myValue.length;
+    } else {
+     myField.value += myValue;
+     myField.focus();
+    }
+    }
+</script>
+
+
+</body>
+</html>
