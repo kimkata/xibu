@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<h3>Map520网址测试结果如下,只能从IPV6访问:</h3>
+<div id="iplist"></div>
+
+
+
+<script>
+      var has_open_window = false;
+      function ping (ip) {
+        var img = new Image();
+        var start = new Date().getTime();
+        img.src = "http://" + ip + "/map.ico?t=" + start;
+        var flag = false;
+        console.log(img.src);
+        img.onload = function () {
+            flag = true;
+            var p = document.createElement("p");			
+            var content = "<a style='color:blue;' href= \""+ "http://" + ip +"\">"+ ip +"</a>"
+            p.innerHTML = content;	
+            document.querySelector("#iplist").appendChild(p);
+            console.log("ok");
+            if (!has_open_window){
+                has_open_window = true;
+                window.open("http://" + ip);
+            }            
+        };
+        img.onerror = function () {
+            flag = false;
+            var p = document.createElement("p");			
+            var content = "<del><a style='color:red;' href= \""+ "http://" + ip +"\">"+ ip +"</a></del>"
+            p.innerHTML = content;	
+            document.querySelector("#iplist").appendChild(p);
+            console.log("false");
+        };
+    }
+    ping('kimkatpi.dns.army:5000');
+    ping('kimkat.dns.army:5000');
+</script>
+
+    
+</body>
+</html>
