@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="map.ico">
+    <link rel="stylesheet" type="text/css" href="stylesheets/map520.css">
+    <script type="text/javascript" src="javascript/json2csv.js" charset="utf-8"></script>
+    <script type="text/javascript" src="javascript/checkBrowser.js" defer="defer" charset="utf-8"></script>
+    <title>变量替换工具</title>
+</head>
+
+<body>
+    <h2>变量替换工具--请勿传播</h2>
+    <h3>QQ956302200</h3>
+    <table width="98%" cellspacing="0" cellpadding="5" border="0" align="center">
+        <tbody>
+            <tr>
+                <td><textarea id="products_input" style="border: 1px solid #d9d9d9;height: 180px;width:80%;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">
+                    <label for="toType">&nbsp;&nbsp;替换至类型:&nbsp;<select id="toType" style="height: 23px">
+                            <option value="0">切换为完整名称</option>
+                            <option value="1">切换为字母缩写</option>
+                            <option value="2">切换为中文简写</option>
+                        </select></label>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">
+                    <button id="convert" class="button" onclick="results=[];convert();" style="color:blue">开始转换</button>
+                    <input name="Button" type="button" onclick="results=[];document.querySelector('#products_input').value='';" value="清除数据">
+                    <button id="download" class="button">下载结果</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <textarea id="result" style="border: 1px solid #d9d9d9;height:360px;width:80%;">转换结果(或直接下载)</textarea>
+
+                    <textarea id="products_names" style="border: 1px solid #d9d9d9;height:360px;width:80%;">转换变量表格(可切换至前3种变量值,你可以在记事本中记下自己用到的变量对应文本,用的时候复制到这里...):                        
+
+三级甲等/三甲/三级/3级
+三级乙等/三乙/三级/3级
+二级丙等/二丙/二级/2级
+二级甲等/二甲/二级/2级
+二级乙等/二乙/二级/2级
+一级丙等/一丙/一级/1级
+一级甲等/一甲/一级/1级
+一级乙等/一乙/一级/1级
+甘肃大区/甘肃大区/甘肃
+贵州大区/贵州大区/贵州
+陕西大区/陕西大区/陕西
+四川大区/四川大区/四川
+新疆大区/新疆大区/新疆
+云南大区/云南大区/云南
+重庆大区/重庆大区/重庆
+复方丹参滴丸/FDD/丹滴/丹参滴丸
+益心复脉颗粒/YXFM/益心复脉
+养血清脑制剂/YX/养血/养血清脑颗粒/养血清脑
+芪参益气滴丸/QS/芪参/芪参益气
+水飞蓟宾胶囊/SLJ/水林佳
+荆花胃康胶丸/WK/胃康/荆花胃康/荆花
+注射用益气复脉(冻干)/YQFM/益气复脉/益气复脉(冻干)/QYFM/气益复脉/益气附脉
+醒脑静注射液/XNJ/醒脑静
+芍麻止痉颗粒/SM/芍麻止痉/芍麻/勺麻/勺麻止痉
+穿心莲内酯滴丸/CXL/穿心莲/穿心莲内脂/穿心
+柴胡滴丸/CH/柴胡
+赖诺普利氢氯噻嗪片/LQ/赖氢/赖诺普利/噻嗪片/噻嗪
+苯扎贝特片(阿贝他)/ABT/阿贝他/苯扎贝特片/苯扎贝/阿贝它/苯扎
+注射用盐酸地尔硫卓/DELZ/盐酸地尔硫卓/地尔/DERZ/DRLZ/地尔硫䓬
+注射用替莫唑胺/ZSDQ/注射用替莫唑胺
+替莫唑胺胶囊(蒂清)/DQ/蒂清/帝清/替莫唑胺胶囊
+他达拉非片/DX/他达拉非/蒂欣/TDLF
+氟他胺/FTA/氟他胺/氟他/氟它胺
+右佐匹克隆/WF/文飞
+注射用丹参多酚酸/DSDFS/丹参多酚酸/丹多/DD
+藿香正气滴丸/HX/藿香
+坤灵丸/KLW/坤灵丸/坤灵
+益生菌/YSJ/益生菌/益生菌粉
+清热解毒口服液/QRJD/清热解毒
+米诺膦酸片/MNLS/米诺膦酸/MN
+天麻丸/TMW/天麻丸
+消渴清颗粒/XKQ/消渴清
+吲达帕胺片/YDPA/吲达帕胺
+大山楂丸/DSZW/大山楂丸
+痰咳净滴丸/TKJ/痰咳净
+安宫牛黄丸/AGNHW/安宫牛黄丸/安宫牛黄/AG
+注射用重组人尿激酶原（普佑克）/PUK/普佑克/PYK
+吉非替尼片/JFTN/吉非替尼
+坤心宁颗粒/KXN/坤心宁/坤心/KXL
+</textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        var results = [];
+        var allcount = 0;
+        var fields = ['Index', 'InputName', 'OutputName'];
+
+        function convert() {
+            //获取品种对应的表格，然后转换为数组。
+            var products_output_arr = [];
+            var products_names_arr = document.querySelector('#products_names').value.split(/\n/g);
+            var products_names_arrs = [];
+            products_names_arr.forEach(function(e) {
+                if (e.indexOf('/') != -1) {
+                    var arr = e.split(/\//g);
+                    products_names_arrs.push(arr);
+                }
+            });
+            console.log(products_names_arrs)
+                //获取所有的品种列表。
+            var products_input_arr = document.querySelector('#products_input').value.split(/\n/g);
+            var row = 0
+
+
+            products_input_arr.forEach(function(ee) {
+                //遍历所有产品列，来查找值。
+                row++;
+                var product_input_array_in_line = ee.split("\t");
+                var product_input_array_output = [];
+                console.log("@@", product_input_array_in_line);
+                product_input_array_in_line.forEach(function(e) {
+                    var product_new_name = e;
+                    var is_product_name_found = false;
+                    products_names_arrs.forEach(function(products_arr) {
+                        if (is_product_name_found) {
+                            return;
+                        }
+                        for (var i = 0; i < products_arr.length; i++) {
+                            var name = products_arr[i];
+                            if ((e.toUpperCase().trim() === name) || (e.toUpperCase().indexOf(name) > -1)) {
+                                var toType = parseInt(document.querySelector('#toType').value);
+                                product_new_name = products_arr[toType];
+                                is_product_name_found = true;
+                                product_input_array_output.push(product_new_name);
+                                break;
+                            }
+                        }
+                    });
+                    if (!is_product_name_found) {
+                        product_input_array_output.push(e);
+                        return;
+                    }
+                });
+                product_new_name = product_input_array_output.join("\t");
+                if ("" === ee) {
+                    product_new_name = "";
+                }
+                console.log({
+                    'Index': row,
+                    'InputName': ee,
+                    'OutputName': product_new_name
+                });
+                products_output_arr.push(product_new_name);
+                results.push({
+                    'Index': row,
+                    'InputName': ee,
+                    'OutputName': product_new_name
+                });
+            });
+
+            document.querySelector('#result').value = products_output_arr.join('\n');
+        }
+
+
+        //以下是下载文件的内容
+        var downloadButton = document.querySelector('#download');
+        var fileDownload = function(content, filename) {
+            var eleLink = document.createElement('a');
+            eleLink.download = filename;
+            eleLink.style.display = 'none';
+            var blob = new Blob([content]);
+            eleLink.href = URL.createObjectURL(blob);
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            document.body.removeChild(eleLink);
+        };
+        if ('download' in document.createElement('a')) {
+            downloadButton.addEventListener('click', function() {
+                results.sort(compare('Index'));
+                var csv = '\uFEFF' + json2csv({
+                    data: results,
+                    fields: fields
+                });
+                var filename = 'output_' + Date.parse(new Date) + '.csv';
+                fileDownload(csv, filename);
+            });
+        } else {
+            downloadButton.onclick = function() {
+                alert('此浏览器不支持下载文件,建议使用谷歌chrome浏览器或火狐firefox访问本网页!');
+            };
+        }
+
+        //比较2个对方的大小,arr.sort(compare('propertyName'));
+        function compare(property) {
+            return function(a, b) {
+                var value1 = a[property];
+                var value2 = b[property];
+                return value1 - value2;
+            }
+        }
+    </script>
+</body>
+
+</html>
