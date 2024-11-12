@@ -73,8 +73,13 @@
         var year = dateTime.getFullYear();
         var month = dateTime.getMonth() + 1;
         var day = dateTime.getDate();
+        var hour = dateTime.getHours();
+        var min = dateTime.getMinutes();
+        var sec = dateTime.getSeconds();
         var weekday = dateTime.getDay();
-        return year + "-" + month + "-" + day + ", " + datelist[weekday];
+
+
+        return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + "  " + datelist[weekday];
     }	
 	
 </script>
