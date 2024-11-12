@@ -73,7 +73,7 @@
         var sec = dateTime.getSeconds();
         var weekday = dateTime.getDay();
         //return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + "," + datelist[weekday];
-		return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
+		return year + "-" + month.toString().padStart(2,'0') + "-" + day.toString().padStart(2,'0') + " " + hour.toString().padStart(2,'0') + ":" + min.toString().padStart(2,'0') + ":" + sec.toString().padStart(2,'0');
     }	
 	
 </script>
