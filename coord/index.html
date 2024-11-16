@@ -19,8 +19,7 @@
 <div id="container"></div>
 <div class="info">
     <h4 id="status">正在加载地图组件,请稍等...</h4><hr>
-    <p id="result"></p>
-	<p id="kimkat_code_value"></p><hr>
+    <p id="result"></p><hr>
 </div>
 
 <script>
@@ -34,8 +33,6 @@
 		return result;
     }
 </script>
-
-
 
 <script type="module">
   import init, {get_hash_data,get_hash_data_with_datetime} from './wasm_search.js';
@@ -79,10 +76,10 @@
         str.push('坐标：' + data.position);
         if(data.accuracy){
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
-        }//如为IP精确定位结果则没有精度信息
+        }  //如为IP精确定位结果则没有精度信息
 		var ret = kimkat_code_v2(data.position);		
 		str.push('时间：' + ret.split("/")[0]);
-		str.push('验证：' + ret.split("/")[1].slice(0,4));
+		str.push('验证：' + ret.split("/")[1].slice(0,8));
         document.getElementById('result').innerHTML = str.join('<br>');
     }
     //解析定位错误信息
