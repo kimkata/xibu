@@ -32,7 +32,8 @@
 
 <script>
     function kimkat_code(s) {
-        var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(s)));
+		var content = s.replace(/[^\d]/g,"");
+        var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(content)));
 		return result;
     }
 </script>
