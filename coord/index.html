@@ -75,13 +75,14 @@
     function onComplete(data) {	
 	    document.getElementById('status').innerHTML='定位成功'
         var str = [];
-		var date = new Date();
+		var date = new Date();				
+        str.push('坐标：' + data.position);
         if(data.accuracy){
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
         }//如为IP精确定位结果则没有精度信息
 		var ret = kimkat_code_v2(data.position);		
 		str.push('时间：' + ret.split("/")[0]);
-		str.push('验证: ' + ret.split("/")[1].slice(0,8));
+		str.push('验证:  ' + ret.split("/")[1].slice(0,8));
         document.getElementById('result').innerHTML = str.join('<br>');
     }
     //解析定位错误信息
