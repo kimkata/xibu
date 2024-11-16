@@ -76,7 +76,7 @@
 	    document.getElementById('status').innerHTML='定位成功'
         var str = [];
 		var date = new Date();				
-        str.push('GPS坐标：' + data.position + ' 类别：' + data.location_type + '偏移：' + (data.isConverted ? '是' : '否')
+        str.push('GPS坐标：' + data.position + ' 类别：' + data.location_type + '偏移：' + (data.isConverted ? '是' : '否'));
         if(data.accuracy){
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
         }//如为IP精确定位结果则没有精度信息
