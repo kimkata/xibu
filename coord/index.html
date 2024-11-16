@@ -50,7 +50,6 @@
             position:'RB',    //定位按钮的停靠位置
             offset: [10, 20], //定位按钮与设置的停靠位置的偏移量，默认：[10, 20]
             zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
-
         });
         map.addControl(geolocation);
         geolocation.getCurrentPosition(function(status,result){
@@ -75,7 +74,7 @@
 
     //解析定位结果
     function onComplete(data) {	
-	    document.getElementById('status').innerHTML='定位成功 ❤ 如未显示坐标信息,请刷新..';
+	    document.getElementById('status').innerHTML='定位成功 ✔';
         var str = [];
 		var date = new Date();				
         str.push('坐标：' + data.position);
