@@ -43,16 +43,6 @@
     await init();
     window.get_hash_data = get_hash_data;
 	window.get_hash_data_with_datetime = get_hash_data_with_datetime;
-  }
-  run();
-</script>
-
-
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=7387615b06d9e8eb11c52b33960afdea"></script>
-<script defer type="text/javascript">
-    var map = new AMap.Map('container', {
-        resizeEnable: true
-    });
     AMap.plugin('AMap.Geolocation', function() {
         var geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -71,6 +61,18 @@
             }
         });
     });
+	
+  }
+  run();
+</script>
+
+
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=7387615b06d9e8eb11c52b33960afdea"></script>
+<script type="text/javascript">
+    var map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+
     //解析定位结果
     function onComplete(data) {	
 	    document.getElementById('status').innerHTML='定位成功 ❤ 如未显示坐标信息,请刷新..';
