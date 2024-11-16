@@ -41,7 +41,6 @@
   import init, {get_hash_data,get_hash_data_with_datetime} from './wasm_search.js';
   async function run() {
     await init();
-    window.get_hash_data = get_hash_data;
 	window.get_hash_data_with_datetime = get_hash_data_with_datetime;
     AMap.plugin('AMap.Geolocation', function() {
         var geolocation = new AMap.Geolocation({
