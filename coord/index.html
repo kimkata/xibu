@@ -31,7 +31,7 @@
     }
     function kimkat_code_v2(s) {
         var result = (new TextDecoder("utf-8")).decode(get_hash_data_with_datetime((new TextEncoder("utf-8")).encode(s)));
-		return result.slice(0,8);
+		return result;
     }
 </script>
 
