@@ -29,15 +29,20 @@
         var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(content)));
 		return result.slice(0,8);
     }
+    function kimkat_code_v2(s) {
+        var result = (new TextDecoder("utf-8")).decode(get_hash_data_with_datetime((new TextEncoder("utf-8")).encode(s)));
+		return result.slice(0,8);
+    }
 </script>
 
 
 
 <script type="module">
-  import init, {get_hash_data} from './wasm_search.js';
+  import init, {get_hash_data,get_hash_data_with_datetime} from './wasm_search.js';
   async function run() {
     await init();
     window.get_hash_data = get_hash_data;
+	window.get_hash_data_with_datetime = get_hash_data_with_datetime;
   }
   run();
 </script>
@@ -70,15 +75,16 @@
     function onComplete(data) {	
 	    document.getElementById('status').innerHTML='定位成功'
         var str = [];
-		var date = new Date();
-		str.push('定位时间：' + format_date(date));		
+		var date = new Date();				
         str.push('定位结果：' + data.position);
         str.push('定位类别：' + data.location_type);
         if(data.accuracy){
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-		str.push('验证码:' + kimkat_code(format_date(date)+data.position));
+		var ret = kimkat_code_v2(data.position);
+		str.push('验证码:' + ret.split("/")[1]);
+		str.push('定位时间：' + ret.split("/")[0]);
         document.getElementById('result').innerHTML = str.join('<br>');
     }
     //解析定位错误信息
