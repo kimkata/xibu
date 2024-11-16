@@ -73,7 +73,7 @@
     });
     //解析定位结果
     function onComplete(data) {	
-	    document.getElementById('status').innerHTML='定位成功';
+	    document.getElementById('status').innerHTML='定位成功✔';
         var str = [];
 		var date = new Date();				
         str.push('坐标：' + data.position);
@@ -87,7 +87,7 @@
     }
     //解析定位错误信息
     function onError(data) {
-        document.getElementById('status').innerHTML='定位失败'
+        document.getElementById('status').innerHTML='定位失败😒'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message+'</br>浏览器返回信息：'+data.originMessage;
     }
 	
