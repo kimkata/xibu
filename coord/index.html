@@ -19,24 +19,36 @@
 <div id="container"></div>
 <div class="info">
     <h4 id="status"></h4><hr>
-    <p id="result"></p><hr>
+    <p id="result"></p>
+	<p id="kimkat_code_value"></p><hr>
 </div>
-<script type="module">
-  import init, {get_hash_data} from './wasm_search.js';
-  async function run() {
-    await init();
-    window.get_hash_data = get_hash_data;
-  }
-  run();
-</script>
 
 <script>
     function kimkat_code(s) {
 		var content = s.replace(/[^\d]/g,"");
         var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(content)));
-		return result;
+		return result.slice(0,8);
     }
 </script>
+
+
+
+<script type="module">
+  var is_wasm_ok = false;
+  var content_to_hash = "";
+  import init, {get_hash_data} from './wasm_search.js';
+  async function run() {
+    await init();
+    window.get_hash_data = get_hash_data;
+	is_wasm_ok = true;
+	if(content_to_hash != ""){
+	   document.getElementById('kimkat_code_value').innerHTML ='验证码：' + kimkat_code(content_to_hash);
+	}
+  }
+  run();
+</script>
+
+
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=7387615b06d9e8eb11c52b33960afdea"></script>
 <script type="text/javascript">
     var map = new AMap.Map('container', {
@@ -61,8 +73,8 @@
         });
     });
     //解析定位结果
-    function onComplete(data) {
-        document.getElementById('status').innerHTML='定位成功'
+    function onComplete(data) {	
+	    document.getElementById('status').innerHTML='定位成功'
         var str = [];
 		var date = new Date();
 		str.push('定位时间：' + format_date(date));		
@@ -72,9 +84,11 @@
              str.push('精度：' + data.accuracy + ' 米');
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-		str.push('验证码：' + kimkat_code(format_date(date)+data.position).slice(0,8));
-		
         document.getElementById('result').innerHTML = str.join('<br>');
+		content_to_hash = format_date(date) + data.position;
+		if(is_wasm_ok){
+		   document.getElementById('kimkat_code_value').innerHTML ='验证码：' + kimkat_code(format_date(date)+data.position);
+		}
     }
     //解析定位错误信息
     function onError(data) {
