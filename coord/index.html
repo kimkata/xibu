@@ -78,7 +78,7 @@
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-		str.push('验证码:',kimkat_code(format_date(date)+data.position));
+		str.push('验证码:' + kimkat_code(format_date(date)+data.position));
         document.getElementById('result').innerHTML = str.join('<br>');
     }
     //解析定位错误信息
