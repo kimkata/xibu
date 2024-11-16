@@ -76,15 +76,13 @@
 	    document.getElementById('status').innerHTML='定位成功'
         var str = [];
 		var date = new Date();				
-        str.push('定位结果：' + data.position);
-        str.push('定位类别：' + data.location_type);
+        str.push('GPS坐标：' + data.position + ' 类别：' + data.location_type + '偏移：' + (data.isConverted ? '是' : '否')
         if(data.accuracy){
              str.push('精度：' + parseInt(data.accuracy) + ' 米');
         }//如为IP精确定位结果则没有精度信息
-        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-		var ret = kimkat_code_v2(data.position);
-		str.push('验证码:' + ret.split("/")[1]);
+		var ret = kimkat_code_v2(data.position);		
 		str.push('定位时间：' + ret.split("/")[0]);
+		str.push('加密验证: ' + ret.split("/")[1].slice(0,8));
         document.getElementById('result').innerHTML = str.join('<br>');
     }
     //解析定位错误信息
@@ -92,6 +90,7 @@
         document.getElementById('status').innerHTML='定位失败'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message+'</br>浏览器返回信息：'+data.originMessage;
     }
+	
     function format_date(dateTime){
         let datelist = ['周日','周一','周二','周三','周四','周五','周六',]
         var year = dateTime.getFullYear();
