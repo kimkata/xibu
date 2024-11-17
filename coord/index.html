@@ -83,7 +83,18 @@
 		str.push('时间：' + ret.split("/")[0]);
 		str.push('验证：' + ret.split("/")[1].slice(0,8));
         document.getElementById('result').innerHTML = str.join('<br>');
-		new QRCode(document.getElementById("qrcode"), ret.split("/")[0] + ";" + data.position);
+		//new QRCode(document.getElementById("qrcode"), ret.split("/")[0] + ";" + data.position);
+		
+		var qrcode = new QRCode(document.getElementById("qrcode"), 
+					{
+						text: ret.split("/")[0] + ";" + data.position,
+						width: 128,
+						height: 128,
+						colorDark: "#000000",
+						colorLight: "#ffffff",
+						correctLevel: QRCode.CorrectLevel.H
+					});
+		
     }
     //解析定位错误信息
     function onError(data) {
