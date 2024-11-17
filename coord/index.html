@@ -113,7 +113,7 @@
             if (status === 'complete' && result.info === 'OK') {
                 if (result && result.city && result.bounds) {
                     var cityinfo = result.city;
-                    document.getElementById('cityname').innerHTML = '<font color="blue;"> <strong>IP归属城市:' + cityinfo + "</strong></font>";;
+                    document.getElementById('cityname').innerHTML = '<strong>IP归属城市:<font color="blue;"> ' + cityinfo + "</font></strong>";;
                 }
             }
         });
