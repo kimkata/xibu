@@ -20,8 +20,8 @@
 <div id="container"></div>
 <div class="info">
     <h4 id="status">正在加载地图组件,请稍等...</h4><hr>
-    <p id="result"></p><hr>
-	<div id="qrcode"></div>
+    <p id="result"></p>
+	<div id="qrcode"></div><hr>
 </div>
 
 <script>
@@ -88,8 +88,8 @@
 		var qrcode = new QRCode(document.getElementById("qrcode"), 
 					{
 						text: ret.split("/")[0] + ";" + data.position,
-						width: 64,
-						height: 64,
+						width: 128,
+						height: 128,
 						colorDark: "#000000",
 						colorLight: "#ffffff",
 						correctLevel: QRCode.CorrectLevel.H
