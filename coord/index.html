@@ -25,11 +25,14 @@
 </div>
 
 <script>
-    function kimkat_code(s) {
-        var content = s.replace(/[^\d]/g,"");
-        var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(content)));
-        return result.slice(0,8);
-    }
+
+    // function kimkat_code(s) {
+    //     var content = s.replace(/[^\d]/g,"");
+    //     var result = (new TextDecoder("utf-8")).decode(get_hash_data((new TextEncoder("utf-8")).encode(content)));
+    //     return result.slice(0,8);
+    // }
+	
+	
     function kimkat_code_v2(s) {
         var result = (new TextDecoder("utf-8")).decode(get_hash_data_with_datetime((new TextEncoder("utf-8")).encode(s)));
         return result;
@@ -37,7 +40,7 @@
 </script>
 
 <script type="module">
-  import init, {get_hash_data,get_hash_data_with_datetime} from './wasm_search.js';
+  import init, {get_hash_data_with_datetime} from './wasm_search.js';
   async function run() {
     await init();
     window.get_hash_data_with_datetime = get_hash_data_with_datetime;
