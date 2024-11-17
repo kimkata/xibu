@@ -27,7 +27,7 @@
         <h4 id="status">正在加载地图组件,请稍等...</h4><hr>
         <p id="result"></p>        
     </div>
-    <div id="qrcode"></div><hr>
+    <div id="qrcode" style="margin-top: 5px;"></div><hr>
 </div>
 
 <script>
@@ -84,7 +84,7 @@
         document.getElementById('status').innerHTML='定位成功 ✔ <font color="blue;"> <strong>' + data.position + "</strong></font>";
         var str = [];
         var ret = kimkat_code_v2(data.position);
-        str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp防伪码：<font color="red;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");
+        str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp防伪码：<font color="green;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");
         document.getElementById('result').innerHTML = str.join('<br>');
         var qrcode = new QRCode(document.getElementById("qrcode"), 
                     {
