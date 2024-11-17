@@ -76,20 +76,18 @@
         var str = [];
 		var date = new Date();				
         str.push('坐标：' + data.position);
-        if(data.accuracy){
-             str.push('精度：' + parseInt(data.accuracy) + ' 米');
-        }  //如为IP精确定位结果则没有精度信息
+        // if(data.accuracy){
+        //      str.push('精度：' + parseInt(data.accuracy) + ' 米');
+        // }  //如为IP精确定位结果则没有精度信息
 		var ret = kimkat_code_v2(data.position);		
 		str.push('时间：' + ret.split("/")[0]);
 		str.push('验证：' + ret.split("/")[1].slice(0,8));
-        document.getElementById('result').innerHTML = str.join('<br>');
-		//new QRCode(document.getElementById("qrcode"), ret.split("/")[0] + ";" + data.position);
-		
+        document.getElementById('result').innerHTML = str.join('<br>');		
 		var qrcode = new QRCode(document.getElementById("qrcode"), 
 					{
 						text: ret.split("/")[0] + ";" + data.position,
-						width: 256,
-						height: 256,
+						width: 128,
+						height: 128,
 						colorDark: "#000000",
 						colorLight: "#ffffff",
 						correctLevel: QRCode.CorrectLevel.H
