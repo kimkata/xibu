@@ -87,17 +87,8 @@
         var str = [];
         var ret = kimkat_code_v2(data.position);
         str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");
-        document.getElementById('result').innerHTML = str.join('<br>');
-        var qrcode = new QRCode(document.getElementById("qrcode"), 
-                    {
-                        text: ret.split("/")[0] + ";" + data.position,
-                        width: 256,
-                        height: 64,
-                        colorDark: "#000000",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-		var geocoder = new AMap.Geocoder();
+		
+		var geocoder = new AMap.Geocoder({});
 		var lnglat = data.position.split(',');
         geocoder.getAddress(lnglat, function(status, result) {
             if (status === 'complete'&&result.regeocode) {
@@ -108,7 +99,19 @@
 				document.getElementById('address').value = "根据经纬度查询地址失败";
             }
 			document.getElementById('address').value = "000000000000000000000000";
-        });   
+        }); 
+		
+		
+        document.getElementById('result').innerHTML = str.join('<br>');
+        var qrcode = new QRCode(document.getElementById("qrcode"), 
+                    {
+                        text: ret.split("/")[0] + ";" + data.position,
+                        width: 256,
+                        height: 64,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });  
     }
     //解析定位错误信息
     function onError(data) {
