@@ -89,8 +89,8 @@
         str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");	
 		
         document.getElementById('result').innerHTML = str.join('<br>');
-		var lnglat = data.position.value.split(',');
-		document.getElementById('address').value = lnglat;
+		var lnglat = data.position.lng + ',' + data.position.lat;
+		document.getElementById('address').value = lnglat.split(',');
 		
 		var geocoder = new AMap.Geocoder({});
 		
