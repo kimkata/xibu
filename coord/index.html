@@ -86,10 +86,14 @@
         document.getElementById('status').innerHTML='<strong>定位成功 ✔</strong> <font color="blue;"> <strong>' + data.position + "</strong></font>";
         var str = [];
         var ret = kimkat_code_v2(data.position);
-        str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");
+        str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");	
+		
+        document.getElementById('result').innerHTML = str.join('<br>');
+		var lnglat = data.position.split(',');
 		
 		var geocoder = new AMap.Geocoder({});
-		var lnglat = data.position.split(',');
+		document.getElementById('address').value = lnglat;
+		
         geocoder.getAddress(lnglat, function(status, result) {
             if (status === 'complete'&&result.regeocode) {
                 var address = result.regeocode.formattedAddress;
@@ -102,7 +106,7 @@
         }); 
 		
 		
-        document.getElementById('result').innerHTML = str.join('<br>');
+		
         var qrcode = new QRCode(document.getElementById("qrcode"), 
                     {
                         text: ret.split("/")[0] + ";" + data.position,
