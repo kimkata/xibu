@@ -90,9 +90,10 @@
 		
         document.getElementById('result').innerHTML = str.join('<br>');
 		var lnglat = data.position.split(',');
+		document.getElementById('address').value = lnglat;
 		
 		var geocoder = new AMap.Geocoder({});
-		document.getElementById('address').value = lnglat;
+		
 		
         geocoder.getAddress(lnglat, function(status, result) {
             if (status === 'complete'&&result.regeocode) {
