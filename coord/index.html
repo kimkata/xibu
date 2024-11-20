@@ -89,20 +89,17 @@
         str.push('<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>");	
 		
         document.getElementById('result').innerHTML = str.join('<br>');
-		var lnglat = data.position.lng + ',' + data.position.lat;
-		document.getElementById('cityname').innerHTML = lnglat.split(',');
-		
-		var geocoder = new AMap.Geocoder({});	
-		
+		var lnglat = data.position.lng + ',' + data.position.lat;		
+		var geocoder = new AMap.Geocoder({});
         geocoder.getAddress(lnglat.split(','), function(status, result) {
             if (status === 'complete'&&result.regeocode) {
                 var address = result.regeocode.formattedAddress;
-                document.getElementById('address').innerHTML = address;
+                document.getElementById('cityname').innerHTML = address;
             }else{
                 log.error('根据经纬度查询地址失败')
-				document.getElementById('address').innerHTML = "根据经纬度查询地址失败";
+				document.getElementById('cityname').innerHTML = "根据经纬度查询地址失败";
             }
-			document.getElementById('address').innerHTML = "000000000000000000000000";
+			document.getElementById('cityname').innerHTML = "000000000000000000000000";
         }); 
 		
 		
