@@ -29,7 +29,7 @@
     </div>
     <div id="qrcode" style="margin-top: 5px;"></div><hr>
     <div id="cityname"></div>
-	<div id="address"></div>
+	<div id="addressname"></div>
 </div>
 
 <script>
@@ -90,7 +90,7 @@
 		
         document.getElementById('result').innerHTML = str.join('<br>');
 		var lnglat = data.position.lng + ',' + data.position.lat;
-		document.getElementById('address').value = lnglat.split(',');
+		document.getElementById('addressname').value = lnglat.split(',');
 		
 		var geocoder = new AMap.Geocoder({});
 		
