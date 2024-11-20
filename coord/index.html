@@ -94,7 +94,7 @@
         geocoder.getAddress(lnglat.split(','), function(status, result) {
             if (status === 'complete'&&result.regeocode) {
                 var address = result.regeocode.formattedAddress;
-                document.getElementById('kimkat_address').innerHTML = '<font  color="blue;"> <strong>' + address + "</strong></font>";
+                document.getElementById('kimkat_address').innerHTML =  '<strong>定位地址:<font color="blue;"> ' + '<font  color="blue;"> <strong>' + address + "</strong></font>";
             }else{
                 log.error('根据经纬度查询地址失败')
 				document.getElementById('kimkat_address').innerHTML = '<font  color="blue;"> <strong>' + "根据经纬度查询地址失败" + "</strong></font>";
