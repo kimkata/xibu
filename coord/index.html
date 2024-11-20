@@ -90,7 +90,7 @@
 		
         document.getElementById('result').innerHTML = str.join('<br>');
 		var lnglat = data.position.lng + ',' + data.position.lat;
-		document.getElementById('addressname').value = lnglat.split(',');
+		document.getElementById('cityname').value = lnglat.split(',');
 		
 		var geocoder = new AMap.Geocoder({});
 		
