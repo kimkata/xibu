@@ -98,7 +98,8 @@
                         correctLevel: QRCode.CorrectLevel.H
                     });
 		var geocoder = new AMap.Geocoder();
-        geocoder.getAddress(data.position.split(','), function(status, result) {
+		var lnglat = data.position.split(',');
+        geocoder.getAddress(lnglat, function(status, result) {
             if (status === 'complete'&&result.regeocode) {
                 var address = result.regeocode.formattedAddress;
                 document.getElementById('address').value = address;
