@@ -29,7 +29,7 @@
     </div>
     <div id="qrcode" style="margin-top: 5px;"></div><hr>
     <div id="cityname"></div>
-	<div id="addressname"></div>
+	<div id="kimkat_address"></div>
 </div>
 
 <script>
@@ -94,10 +94,10 @@
         geocoder.getAddress(lnglat.split(','), function(status, result) {
             if (status === 'complete'&&result.regeocode) {
                 var address = result.regeocode.formattedAddress;
-                document.getElementById('cityname').innerHTML = address;
+                document.getElementById('kimkat_address').innerHTML = '<font  color="blue;"> <strong>' + address + "</strong></font>";
             }else{
                 log.error('根据经纬度查询地址失败')
-				document.getElementById('cityname').innerHTML = "根据经纬度查询地址失败";
+				document.getElementById('kimkat_address').innerHTML = '<font  color="blue;"> <strong>' + "根据经纬度查询地址失败" + "</strong></font>";
             }
         }); 
 		
