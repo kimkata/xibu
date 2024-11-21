@@ -86,7 +86,7 @@
         document.getElementById('status').innerHTML='<strong>定位成功 ✔</strong> <font color="blue;"> <strong>' + data.position + "</strong></font>";
         var str = [];
         var ret = kimkat_code_v2(data.position);
-		var temp_str = '<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码：</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "</strong></font>";
+		var temp_str = '<font  color="blue;"> <strong>' + ret.split("/")[0] + "</strong></font>" + '&nbsp&nbsp<strong>防伪码:</strong><font color="blue;"> <strong>' + ret.split("/")[1].slice(0,6) + "&nbsp|&nbsp" +data.location_type + "</strong></font>";
         if(data.accuracy){
              temp_str += '&nbsp&nbsp<strong>精度:<font color="blue;">' + parseInt(data.accuracy) + '</font>米</strong>';
         }		
