@@ -129,6 +129,22 @@
         document.getElementById('status').innerHTML='定位失败😒'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message+'</br>浏览器返回信息：'+data.originMessage;
     }
+
+    //获取用户所在城市信息
+    function showCityInfo() {
+        //实例化城市查询类
+        var citysearch = new AMap.CitySearch();
+        //自动获取用户IP，返回当前城市
+        citysearch.getLocalCity(function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                if (result && result.city && result.bounds) {
+                    var cityinfo = result.city;
+                    document.getElementById('cityname').innerHTML = '<strong>IP归属城市:<font color="blue;"> ' + cityinfo +  "</font></strong>";
+                }
+            }
+        });
+    }
+    showCityInfo();
     
     function format_date(dateTime){
         let datelist = ['周日','周一','周二','周三','周四','周五','周六',]
