@@ -74,7 +74,7 @@ function getCurrentDate() {
         content_copy += liText + "\n\n";
         console.log(`${liText}`);
     });
-    content_copy += "以上链接可能会更新,最好在浏览器中使用网址:xibu.pages.dev访问,而不是在微信中使用!";
+    content_copy += "以上链接可能会过时,最好在浏览器中使用网址: xibu.pages.dev 访问,而不是在微信中使用（微信会拦截）!";
     document.querySelector("#kimkat_copy").setAttribute("data-clipboard-text",content_copy);
 }
 
