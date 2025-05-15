@@ -49,43 +49,28 @@
 function getCurrentDate() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    // 月份从 0 开始计数，所以要加 1，并且保证是两位数
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    // 日期保证是两位数
     const day = String(currentDate.getDate()).padStart(2, '0');
-
     return `${year}-${month}-${day}`;
 }
 
 
 	function extractLiInfo() {
-    // 获取所有的 li 标签
     const lis = document.querySelectorAll('li');
-    // 遍历每个 li 标签
-    var content_copy = "("+ getCurrentDate()+")甘肃大区金数据相关链接以下:\n\n";
+    var content_copy = "("+ getCurrentDate()+")金数据相关链接以下:\n\n";
     lis.forEach(li => {
-        // 获取 li 标签中的文字内容，去除首尾空格
         const liText = li.textContent.trim();
-        // 获取 li 标签下的 a 标签
         const aTag = li.querySelector('a');
-        // 获取 a 标签的 href 属性，如果 a 标签不存在则设为 null
         const href = aTag ? aTag.href : null;
-        // 按照指定格式输出内容
         content_copy += liText + "\n\n";
         console.log(`${liText}`);
     });
     content_copy += "以上链接可能会过时,最好在浏览器中使用网址: xibu.pages.dev 访问,而不是在微信中使用（微信会拦截）!";
     document.querySelector("#kimkat_copy").setAttribute("data-clipboard-text",content_copy);
 }
-
 // 调用函数
 extractLiInfo();
-
 </script>
-
-
-</body>
-</html>
 
 <script>
     var clipboard = new ClipboardJS('.copy_btn');
@@ -105,3 +90,7 @@ extractLiInfo();
         console.error('Trigger:', e.trigger);
     });
 </script>
+
+
+</body>
+</html>
