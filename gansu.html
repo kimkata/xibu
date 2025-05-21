@@ -58,11 +58,13 @@ function getCurrentDate() {
 	function extractLiInfo() {
     const lis = document.querySelectorAll('li');
     var content_copy = "("+ getCurrentDate()+")金数据相关链接以下:\n\n";
+    var count = 0;
     lis.forEach(li => {
         const liText = li.textContent.trim();
         const aTag = li.querySelector('a');
         const href = aTag ? aTag.href : null;
-        content_copy += liText + "\n\n";
+        count ++;
+        content_copy += "[" + count.toString().padStart(2, '0') + "]" + liText + "\n\n";
         console.log(`${liText}`);
     });
     content_copy += "以上链接可能会过时,最好在浏览器中使用网址: xibu.pages.dev 访问,而不是在微信中使用（微信会拦截）!";

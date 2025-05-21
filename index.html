@@ -8,14 +8,15 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <script type="text/javascript" src="javascript/clipboard.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="./images/stylesheets.css">
-    <title>西部战区金数据链接合集</title>
+    <link rel="stylesheet" type="text/css" href="./images/stylesheets.css">    
     <style>
         li{margin-bottom: 10px;margin-top: 5px;}
         a{margin-left: 5px;}
         body{font-family: arial, Arial, 'Microsoft Yahei',Tahoma, Helvetica;}
     </style>
+	
 
+	<title>西部战区金数据链接合集</title>
 </head>
 <body class="book toc2 toc-left">
 <div>
@@ -79,7 +80,13 @@
         // body...
         a.innerText = a.href;
     });
-	
+
+</script>
+</body>
+</html>
+
+
+<script>
 function getCurrentDate() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -92,11 +99,13 @@ function getCurrentDate() {
 	function extractLiInfo() {
     const lis = document.querySelectorAll('li');
     var content_copy = "("+ getCurrentDate()+")金数据相关链接以下:\n\n";
+    var count = 0;
     lis.forEach(li => {
         const liText = li.textContent.trim();
         const aTag = li.querySelector('a');
         const href = aTag ? aTag.href : null;
-        content_copy += liText + "\n\n";
+        count ++;
+        content_copy += "[" + count.toString().padStart(2, '0') + "]" + liText + "\n\n";
         console.log(`${liText}`);
     });
     content_copy += "以上链接可能会过时,最好在浏览器中使用网址: xibu.pages.dev 访问,而不是在微信中使用（微信会拦截）!";
@@ -105,7 +114,6 @@ function getCurrentDate() {
 // 调用函数
 extractLiInfo();
 </script>
-
 <script>
     var clipboard = new ClipboardJS('.copy_btn');
     clipboard.on('success', function (e) {
@@ -124,6 +132,3 @@ extractLiInfo();
         console.error('Trigger:', e.trigger);
     });
 </script>
-</body>
-</html>
-

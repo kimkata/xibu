@@ -7,22 +7,24 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <link rel="stylesheet" type="text/css" href="./images/stylesheets.css">
-    <title>西部战区金数据链接合集</title>
+    <script type="text/javascript" src="javascript/clipboard.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./images/stylesheets.css">    
     <style>
         li{margin-bottom: 10px;margin-top: 5px;}
         a{margin-left: 5px;}
         body{font-family: arial, Arial, 'Microsoft Yahei',Tahoma, Helvetica;}
     </style>
-
+	
+	<title>西部战区金数据链接合集</title>
 </head>
 <body class="book toc2 toc-left">
 <div>
+	<button class="copy_btn" id="kimkat_copy" style="color:blue;margin-top: 20px;" data-clipboard-text="">复制本页内容</button>
     <h4><strong>西部战区“西部大开发”项目</strong></h4>
     <ul>
-        <li><strong><font color="red">2025年西部大开发”项目调研统计表:</font></strong> <br><a target="_blank"  href="https://jsj.ink/f/IBijBN">https://jsj.ink/f/IBijBN</a></li>
-        <li><strong><font color="red">“2025年西部大开发”项目提单统计表:</font></strong><br><a target="_blank"  href="https://jsj.ink/f/HkKia5">https://jsj.ink/f/HkKia5</a></li>
-        <li><strong><font color="red">“2025年西部大开发”项目开发成功统计表:</font></strong><br><a target="_blank"  href="https://jsj.ink/f/ILC648">https://jsj.ink/f/ILC648</a></li>        
+        <li><strong><font color="red">《2025年西部大开发》项目调研统计表:</font></strong> <br><a target="_blank"  href="https://jsj.ink/f/IBijBN">https://jsj.ink/f/IBijBN</a></li>
+        <li><strong><font color="red">《2025年西部大开发》项目提单统计表:</font></strong><br><a target="_blank"  href="https://jsj.ink/f/HkKia5">https://jsj.ink/f/HkKia5</a></li>
+        <li><strong><font color="red">《2025年西部大开发》项目开发成功统计表:</font></strong><br><a target="_blank"  href="https://jsj.ink/f/ILC648">https://jsj.ink/f/ILC648</a></li>        
     </ul>
     <!-- <img src="images/西部大开发.png"></img> -->
 
@@ -31,3 +33,50 @@
 </div>
 </body>
 </html>
+
+<script>
+function getCurrentDate() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+
+	function extractLiInfo() {
+    const lis = document.querySelectorAll('li');
+    var content_copy = "("+ getCurrentDate()+")金数据相关链接以下:\n\n";
+    var count = 0;
+    lis.forEach(li => {
+        const liText = li.textContent.trim();
+        const aTag = li.querySelector('a');
+        const href = aTag ? aTag.href : null;
+        count ++;
+        content_copy += "[" + count.toString().padStart(2, '0') + "]" + liText + "\n\n";
+        console.log(`${liText}`);
+    });
+    content_copy += "以上链接可能会过时,最好在浏览器中使用网址: xibu.pages.dev 访问,而不是在微信中使用（微信会拦截）!";
+    document.querySelector("#kimkat_copy").setAttribute("data-clipboard-text",content_copy);
+}
+// 调用函数
+extractLiInfo();
+</script>
+<script>
+    var clipboard = new ClipboardJS('.copy_btn');
+    clipboard.on('success', function (e) {
+        document.querySelectorAll(".copy_btn").forEach(function (item) {
+            if (item.style.color != 'blue') { item.style.color = 'blue'; }
+        });
+        e.trigger.style.color = 'red';
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function (e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+</script>
