@@ -32,7 +32,7 @@
 	
     <h4><strong>心血管(一)</strong></h4>
     <ul>
-		<li><strong><font style="color:red;">FDD糖网病例收集: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/KvKHFp"></a></li>
+        <li><strong><font style="color:red;">FDD糖网病例收集: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/KvKHFp"></a></li>
 		<li><strong><font style="color:red;">FDD住院部出院带药: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/K4uZqB"></a></li>  		
         <li><strong><font style="color:black;">地县乡联动项目: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/hvF8nQ"></a></li>
     </ul>
@@ -70,11 +70,17 @@
 
 <script type="text/javascript">
     var nodes = document.querySelectorAll("li a");
+    var hrefs = [];
     nodes.forEach(function fill_href(a) {
         // body...
         a.innerText = a.href;
+        hrefs.push(a.href); 
     });
-
+    //如果hrefs中有重复值，弹窗提醒
+    var uniqueHrefs = new Set(hrefs);
+    if (uniqueHrefs.size !== hrefs.length) {
+        alert("有重复的链接，请检查！");
+    }
 </script>
 </body>
 </html>

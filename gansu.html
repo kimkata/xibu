@@ -41,10 +41,17 @@
 </div>
 <script type="text/javascript">
     var nodes = document.querySelectorAll("li a");
+    var hrefs = [];
     nodes.forEach(function fill_href(a) {
         // body...
         a.innerText = a.href;
+        hrefs.push(a.href); 
     });
+    //如果hrefs中有重复值，弹窗提醒
+    var uniqueHrefs = new Set(hrefs);
+    if (uniqueHrefs.size !== hrefs.length) {
+        alert("有重复的链接，请检查！");
+    }
 	
 function getCurrentDate() {
     const currentDate = new Date();
