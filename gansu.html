@@ -74,7 +74,7 @@ function getCurrentDate() {
         content_copy += "[" + count.toString().padStart(2, '0') + "]" + liText + "\n\n";
         console.log(`${liText}`);
     });
-    content_copy += "以上链接随时可能会更新,最好使用网址: https://xibu.pages.dev 在浏览器或者润工作中访问!";
+    content_copy +=  "以上链接随时可能会更新,最好使用网址: https://xibu.pages.dev 在浏览器中访问!";
     document.querySelector("#kimkat_copy").setAttribute("data-clipboard-text",content_copy);
 }
 // 调用函数
