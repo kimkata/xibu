@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-C3 BLE 控制面板</title>
+  <style>
+    body {
+      font-family:"Consolas", "Menlo", "Roboto Mono", "Courier New", monospace;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    input,button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      min-width: 100px;
+      min-height: 35px;
+
+    }
+
+    .text {
+      margin-top: 10px;
+      margin-left: 10px;
+      min-width: 30px;
+      min-height: 25px;
+      max-width: 75px;
+      text-align: center;
+    }
+
+    input:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      min-height: 100px;
+      text-align: left;
+      background-color: #f9f9f9;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <h3><span id="status" style="color:red;"></span>&nbsp&nbspESP32C3蓝牙控制</h3>
+  <p><strong><span id="ble_ack" style="color:blue;"></span></strong></p>
+    <div>
+      <input type="button" name="connect" value="连接蓝牙" onclick="connect_to_bluetooth();">
+    </div>  
+
+    <div>
+      <span style="margin-left: 10px;">倒计时分:</span>
+      <input type="text" class="text" id="timer_input" value="20">
+      <input type="button" class="btn kimkat" value="设置时间" onclick="set_timer();" disabled>
+    </div>
+    <div id = 'kimkat_buttons'></div>
+    <div>
+      <input type="button" class="btn" value="清除日志" onclick="document.querySelector('#log').innerHTML='';">
+    </div>
+
+    <div id="log"></div>
+
+    <script type="text/javascript">
+          var kimkat_buttons_arrays = [['kk_start','开始计时','btn kimkat','disabled'],
+                                      ['kk_pause','暂停计时','btn kimkat','disabled'],
+                                      ['kk_stop','停止计时','btn kimkat','disabled'],
+                                      ['kk_reset','从0计时','btn kimkat','disabled'],
+                                      ['kk_up','窗口上移','btn kimkat','disabled'],
+                                      ['kk_down','窗口下移','btn kimkat','disabled'],
+                                      ['kk_left','窗口左移','btn kimkat','disabled'],
+                                      ['kk_right','窗口右移','btn kimkat','disabled'],
+                                      ['kk_big','增大字体','btn kimkat','disabled'],
+                                      ['kk_small','减小字体','btn kimkat','disabled'],
+                                      ['kk_play','从头播放','btn kimkat','disabled'],
+                                      ['kk_splay','当前播放','btn kimkat','disabled'],
+                                      ['kk_prev','上一页','btn kimkat','disabled'],
+                                      ['kk_next','下一页','btn kimkat','disabled'],
+                                      ['kk_blk','黑屏/恢复','btn kimkat','disabled'],
+                                      ['kk_esc','退出播放','btn kimkat','disabled'],
+                                      ['kk_show', '隐藏/显示', 'btn kimkat', 'disabled'],
+                                      ['kk_mse', '鼠标归位', 'btn kimkat', 'disabled'],
+                                      ['kk_desktop', '显示桌面', 'btn kimkat', 'disabled'],
+                                      ['kk_kimkat8', '快捷键8', 'btn kimkat', 'disabled'],
+                                      ['kk_kimkat9', '快捷键9', 'btn kimkat', 'disabled'],
+                                      ['kk_systemtime', '显示系统时间', 'btn kimkat', 'disabled'],
+                                    ];
+          var kimkat_buttons_html = '';
+          kimkat_buttons_arrays.forEach(function(button) {
+            kimkat_buttons_html += `<input type="button" class="${button[2]}" value="${button[1]}" onclick="kimkat_write('${button[0]}');" ${button[3]}>`;
+          });
+          document.querySelector('#kimkat_buttons').innerHTML = kimkat_buttons_html;
+    </script>
+
+    <script type="text/javascript">
+      let logElement = document.getElementById('log');
+      // 日志输出函数
+      function log(message) {
+        logElement.innerHTML += `${new Date().toLocaleTimeString()}: ${message}<br>`;
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+      var kimkat_characteristic;
+      async function connect_to_bluetooth(argument) {
+        if ('bluetooth' in navigator) {
+          // 浏览器支持Web Bluetooth API
+          const HEART_RATE_SERVICE_UUID = 0x180D;
+          const HEART_RATE_CHARACTERISTIC_UUID = 0x2A37;
+
+          const AUTOMATION_IO_SERVICE_UUID = 0x1815;
+          const LED_CHARACTERISTIC_UUID = '00001525-1212-efde-1523-785feabcd123';
+          const device = await navigator.bluetooth.requestDevice({
+            filters: [{ namePrefix: "MeetingTimer" }],
+            optionalServices: [HEART_RATE_SERVICE_UUID, HEART_RATE_CHARACTERISTIC_UUID, AUTOMATION_IO_SERVICE_UUID, LED_CHARACTERISTIC_UUID]
+          });
+          device.addEventListener('gattserverdisconnected', onDisconnected);
+          const server = await device.gatt.connect();
+          console.log("连接设备: " , device.name);
+          console.log("连接服务: " ,server);
+
+          const service = await server.getPrimaryService(HEART_RATE_SERVICE_UUID);
+          console.log("获取心率服务: ", service);
+          const characteristic = await service.getCharacteristic(HEART_RATE_CHARACTERISTIC_UUID);
+          console.log("获取心率特征: ", characteristic);
+          await characteristic.startNotifications();
+          console.log("开始通知: ", characteristic);
+          characteristic.addEventListener('characteristicvaluechanged', handleCharacteristicValueChanged);
+          console.log("特征已设置: ", characteristic);
+
+          const ledService = await server.getPrimaryService(AUTOMATION_IO_SERVICE_UUID);
+          console.log("获取自动化IO服务: ", ledService);
+          const ledCharacteristic = await ledService.getCharacteristic(LED_CHARACTERISTIC_UUID);
+          await ledCharacteristic.startNotifications();
+          ledCharacteristic.addEventListener('characteristicvaluechanged', handleCharacteristicValueChangedAck);
+          kimkat_characteristic = ledCharacteristic;
+          console.log("获取LED特征: ", ledCharacteristic);
+
+          if (kimkat_characteristic) {
+              log("已经连接到蓝牙...");
+          }
+
+          const buttons = document.querySelectorAll('.kimkat');
+          buttons.forEach(button => {
+            button.disabled = false;
+          });
+        }
+      }
+
+      function handleCharacteristicValueChanged(event) {
+        const value = event.target.value;
+        console.log("接收到数据: ", value);
+        // 处理接收到的数据
+        // 例如，将其转换为字符串并显示在页面上
+        const decoder = new TextDecoder("utf-8");
+        const strValue = decoder.decode(value);
+        //在index.html中显示接收到的数据
+        document.getElementById("status").innerText = strValue;
+        console.log("解码后的数据: ", strValue);
+      }
+
+      function handleCharacteristicValueChangedAck(event) {
+        const value = event.target.value;
+        console.log("接收到应答: ", value);
+        // 处理接收到的数据
+        // 例如，将其转换为字符串并显示在页面上
+        const decoder = new TextDecoder("utf-8");
+        const strValue = decoder.decode(value);
+        //在index.html中显示接收到的数据
+        document.getElementById("ble_ack").innerText = strValue;
+        console.log("解码后的数据: ", strValue);
+      }
+
+
+      function kimkat_write(data) {
+        if (kimkat_characteristic) {
+          const encoder = new TextEncoder("utf-8");
+          const encodedData = encoder.encode(data);
+          // kimkat_characteristic.writeValueWithoutResponse(encodedData)
+          kimkat_characteristic.writeValue(encodedData)
+            .then(() => {
+              log("发送:" + data);
+            })
+            .catch(error => {
+              console.error("数据写入失败: ", error);
+            });
+        } else {
+          console.error("特征未定义，无法写入数据");
+        }
+      }
+
+      function set_timer() {
+        var time_to_set_min = document.querySelector("#timer_input").value;
+        kimkat_write('kk_min' + time_to_set_min);
+        log("设置倒计时为: " + time_to_set_min + " 分钟");
+      }
+
+      function onDisconnected(event) {
+        const device = event.target;
+        log(`设备 ${device.name} 已断开连接`);
+        kimkat_characteristic = null;
+        const buttons = document.querySelectorAll('.kimkat');
+        buttons.forEach(button => {
+          button.disabled = true;
+        });
+      }
+    </script>
+</body>
+</html>
