@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网页链接合集</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #f1f3f4;
+            --text-color: #202124;
+            --bg-color: #ffffff;
+            --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #8ab4f8;
+                --secondary-color: #5f6368;
+                --text-color: #e8eaed;
+                --bg-color: #202124;
+                --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .link-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .link-url {
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .link-description {
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .link-button:hover {
+            background-color: #3367d6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .links-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 10px 0;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* 搜索框样式 */
+        .search-container {
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        #search {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--secondary-color);
+            border-radius: 24px;
+            font-size: 16px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的网页链接合集</h1>
+        <p class="description">这里是我收集的有用网页链接，点击卡片即可访问。支持手机和电脑浏览。</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search" placeholder="搜索链接..." aria-label="搜索链接">
+    </div>
+
+    <div class="links-container" id="linksContainer">
+        <!-- 链接卡片将通过JavaScript动态生成 -->
+    </div>
+
+    <footer>
+        <p>最后更新: <span id="updateDate"></span> | 共 <span id="linkCount">0</span> 个链接</p>
+    </footer>
+
+    <script>
+        // 链接数据
+        const links = [
+            {
+                title: "GitHub",
+                url: "https://github.com",
+                description: "全球最大的代码托管平台",
+                icon: "G"
+            },
+            {
+                title: "MDN Web Docs",
+                url: "https://developer.mozilla.org",
+                description: "最权威的Web开发文档",
+                icon: "M"
+            },
+            {
+                title: "Stack Overflow",
+                url: "https://stackoverflow.com",
+                description: "程序员问答社区",
+                icon: "S"
+            },
+            {
+                title: "CSS-Tricks",
+                url: "https://css-tricks.com",
+                description: "前端开发技巧和教程",
+                icon: "C"
+            },
+            {
+                title: "Dev.to",
+                url: "https://dev.to",
+                description: "开发者社区和博客平台",
+                icon: "D"
+            },
+            {
+                title: "CodePen",
+                url: "https://codepen.io",
+                description: "前端代码在线编辑和分享",
+                icon: "P"
+            },
+            {
+                title: "LeetCode",
+                url: "https://leetcode.com",
+                description: "算法练习和面试准备平台",
+                icon: "L"
+            },
+            {
+                title: "Can I use",
+                url: "https://caniuse.com",
+                description: "检查Web技术浏览器兼容性",
+                icon: "U"
+            }
+        ];
+
+        // 渲染链接卡片
+        function renderLinks(linksToRender) {
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+            
+            linksToRender.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'link-card';
+                card.innerHTML = `
+                    <div class="link-icon">${link.icon}</div>
+                    <h3 class="link-title">${link.title}</h3>
+                    <div class="link-url">${link.url}</div>
+                    <p class="link-description">${link.description}</p>
+                    <a href="${link.url}" class="link-button" target="_blank" rel="noopener noreferrer">访问链接</a>
+                `;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('linkCount').textContent = linksToRender.length;
+        }
+
+        // 搜索功能
+        document.getElementById('search').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredLinks = links.filter(link => 
+                link.title.toLowerCase().includes(searchTerm) || 
+                link.description.toLowerCase().includes(searchTerm) ||
+                link.url.toLowerCase().includes(searchTerm)
+            );
+            renderLinks(filteredLinks);
+        });
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLinks(links);
+            
+            // 设置更新日期
+            const now = new Date();
+            document.getElementById('updateDate').textContent = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        });
+
+        // 添加PWA支持
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker 注册成功:', registration.scope);
+                }).catch(error => {
+                    console.log('ServiceWorker 注册失败:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
