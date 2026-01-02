@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网页链接合集</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #f1f3f4;
+            --text-color: #202124;
+            --bg-color: #ffffff;
+            --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #8ab4f8;
+                --secondary-color: #5f6368;
+                --text-color: #e8eaed;
+                --bg-color: #202124;
+                --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .link-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .link-url {
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .link-description {
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .link-button:hover {
+            background-color: #3367d6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .links-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 10px 0;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* 搜索框样式 */
+        .search-container {
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        #search {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--secondary-color);
+            border-radius: 24px;
+            font-size: 16px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>金数据链接合集</h1>
+        <p class="description">这里是金数据网页链接，点击卡片即可访问。</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search" placeholder="搜索链接..." aria-label="搜索链接">
+    </div>
+
+    <div class="links-container" id="linksContainer">
+        <!-- 链接卡片将通过JavaScript动态生成 -->
+    </div>
+
+    <ul>
+        <li><strong><font color="red">《2025年西部大开发》项目调研统计表:</font></strong> <br><a target="_blank"  href="https://xibu.jinshuju.com/f/IBijBN">https://jsj.ink/f/IBijBN</a></li>
+        <li><strong><font color="red">《2025年西部大开发》项目提单统计表:</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/HkKia5">https://jsj.ink/f/HkKia5</a></li>
+        <li><strong><font color="red">《2025年西部大开发》项目开发成功统计表:</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/ILC648">https://jsj.ink/f/ILC648</a></li>        
+    </ul>
+	
+    <ul>
+        <li><strong><font style="color:red;">西区24年新产品周报项目:</font></strong> <br><a target="_blank"  href="https://xibu.jinshuju.com/f/Xykg23">&nbsp&nbsp&nbsp请大家每周四下班前提报，战区周五报给总部!</a></li>
+
+    </ul>
+	
+    <h4><strong>心血管(一)</strong></h4>
+    <ul>
+        <li><strong><font style="color:blue;">FDD糖网病例收集: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/KvKHFp"></a></li>
+		<li><strong><font style="color:blue;">FDD住院部出院带药: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/K4uZqB"></a></li>
+    </ul>
+
+    <h4><strong>心脑血管(二)</strong></h4>
+    <ul>
+        <li><strong><font style="color:red;">2025-QS长处方病例收集:</font></strong> <br><a target="_blank"  href="https://xibu.jinshuju.com/f/PtTH8I"></a></li>
+        <li><strong><font style="color:red;">2025-YQFM病例收集:</font></strong> <br><a target="_blank"  href="https://xibu.jinshuju.com/f/tOnscY"></a></li>
+        <li><strong><font style="color:black;">2025-LQ病例收集:</font></strong> <br><a target="_blank"  href="https://xibu.jinshuju.com/f/NzuI1B"></a></li>
+        <li><strong><font style="color:black;">2025-QS出院带药项目: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/Vr2LqR"></a></li>
+        <li><strong><font style="color:black;">2024年西区PUK项目: </font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/aFCTRx"></a></li>
+    </ul>
+
+    <h4><strong>消化产品</strong></h4>
+    <ul>
+        <li><strong><font style="color:black;">荆彩佳例（精品病例）项目</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/vx3mUp"></a></li> 
+        <li><strong><font style="color:black;">贵州SLJ足量病例收集项目</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/aBpZYM"></a></li> 
+    </ul>
+	
+    <h4><strong>妇儿产品</strong></h4>
+    <ul>
+        <li><strong><font style="color:black;">科普主题日活动</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/rfWQWu"></a></li>
+		<li><strong><font style="color:black;">KXN-长处方病例收集</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/ROwIBD"></a></li>
+		<li><strong><font style="color:black;">KXN-病例收集(黄金首例)</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/ZuLMrZ"></a></li>
+        <li><strong><font style="color:black;">宁“痉”致远——SM病例收集</font></strong><br><a target="_blank"  href="https://xibu.jinshuju.com/f/mqj6Ct"></a></li> 	
+    </ul>
+
+
+    <footer>
+        <p>最后更新: <span id="updateDate"></span> | 共 <span id="linkCount">0</span> 个链接</p>
+    </footer>
+
+    <script>
+        // 链接数据
+        const links = [
+            {title: "《2025年西部大开发》项目调研统计表", url: "https://xibu.jinshuju.com/f/IBijBN",description: "《2025年西部大开发》项目调研统计表",icon: "G"},
+            {title: "《2025年西部大开发》项目提单统计表:",url: "https://xibu.jinshuju.com/f/HkKia5",description: "《2025年西部大开发》项目提单统计表:",icon: "G"},
+            {title: "《2025年西部大开发》项目开发成功统计表:", url: "https://xibu.jinshuju.com/f/ILC648", description: "《2025年西部大开发》项目开发成功统计表:", icon: "G"},
+            {title: "西区24年新产品周报项目", url: "https://xibu.jinshuju.com/f/Xykg23", description: "西区24年新产品周报项目", icon: "G"},
+
+            {title: "FDD糖网病例收集", url: "https://xibu.jinshuju.com/f/KvKHFp", description: "FDD糖网病例收集", icon: "G"},
+            {title: "FDD住院部出院带药", url: "https://xibu.jinshuju.com/f/K4uZqB", description: "FDD住院部出院带药", icon: "G"}
+            
+
+
+        ];
+
+        // 渲染链接卡片
+        function renderLinks(linksToRender) {
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+            
+            linksToRender.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'link-card';
+                card.innerHTML = `
+                    <div class="link-icon">${link.icon}</div>
+                    <h3 class="link-title">${link.title}</h3>
+                    <div class="link-url">${link.url}</div>
+                    <p class="link-description">${link.description}</p>
+                    <a href="${link.url}" class="link-button" target="_blank" rel="noopener noreferrer">访问链接</a>
+                `;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('linkCount').textContent = linksToRender.length;
+        }
+
+        // 搜索功能
+        document.getElementById('search').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredLinks = links.filter(link => 
+                link.title.toLowerCase().includes(searchTerm) || 
+                link.description.toLowerCase().includes(searchTerm) ||
+                link.url.toLowerCase().includes(searchTerm)
+            );
+            renderLinks(filteredLinks);
+        });
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLinks(links);
+            
+            // 设置更新日期
+            const now = new Date();
+            document.getElementById('updateDate').textContent = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        });
+
+        // 添加PWA支持
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker 注册成功:', registration.scope);
+                }).catch(error => {
+                    console.log('ServiceWorker 注册失败:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
