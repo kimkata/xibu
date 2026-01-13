@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV 拆分工具 - 拆分为 2 个文件（带BOM头）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .container {
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+        }
+        button {
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            color: #28a745;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CSV 拆分工具</h1>
+        <p>选择 CSV 文件，自动拆分为 <strong>2 个等分文件</strong>（保留表头 + UTF-8 BOM头）</p>
+        <input type="file" id="csvFile" accept=".csv" />
+        <br>
+        <button id="splitBtn" disabled>开始拆分</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const csvFileInput = document.getElementById('csvFile');
+        const splitBtn = document.getElementById('splitBtn');
+        const statusDiv = document.getElementById('status');
+
+        // UTF-8 BOM 头（\uFEFF 是 BOM 字符的 Unicode 表示）
+        const UTF8_BOM = '\uFEFF';
+
+        // 监听文件选择
+        csvFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                splitBtn.disabled = false;
+                statusDiv.textContent = '';
+            }
+        });
+
+        // 拆分逻辑
+        splitBtn.addEventListener('click', async () => {
+            const file = csvFileInput.files[0];
+            if (!file) return;
+
+            splitBtn.disabled = true;
+            statusDiv.textContent = '正在读取文件...';
+
+            try {
+                // 读取文件为文本（自动处理原文件是否有BOM头）
+                const text = await readFileAsText(file);
+                // 移除原文件可能存在的BOM头，避免重复
+                const textWithoutBom = text.startsWith(UTF8_BOM) ? text.slice(1) : text;
+                const lines = textWithoutBom.split(/\r?\n/).filter(line => line.trim() !== '');
+
+                if (lines.length <= 1) {
+                    throw new Error('文件无有效数据');
+                }
+
+                // 分离表头和数据行
+                const header = lines[0];
+                const dataLines = lines.slice(1);
+                const totalDataLines = dataLines.length;
+                const splitIndex = Math.ceil(totalDataLines / 2);
+
+                // 生成带BOM头的文件内容
+                const file1Content = UTF8_BOM + [header, ...dataLines.slice(0, splitIndex)].join('\n');
+                const file2Content = UTF8_BOM + [header, ...dataLines.slice(splitIndex)].join('\n');
+
+                // 下载文件
+                downloadFile(`${file.name.replace('.csv', '')}_part1.csv`, file1Content);
+                downloadFile(`${file.name.replace('.csv', '')}_part2.csv`, file2Content);
+
+                statusDiv.textContent = `拆分成功！总数据行：${totalDataLines} | 拆分后：${splitIndex} 行 + ${totalDataLines - splitIndex} 行`;
+            } catch (err) {
+                statusDiv.textContent = `拆分失败：${err.message}`;
+                statusDiv.style.color = '#dc3545';
+            } finally {
+                csvFileInput.value = '';
+                splitBtn.disabled = true;
+            }
+        });
+
+        // 读取文件为文本（兼容GBK/UTF-8）
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(new Error('文件读取失败'));
+                // 优先用UTF-8读取，若需兼容GBK可改为 reader.readAsText(file, 'GBK')
+                reader.readAsText(file, 'UTF-8');
+            });
+        }
+
+        // 下载文件（带BOM头）
+        function downloadFile(filename, content) {
+            // 转换为Blob时保留BOM头，确保编码正确
+            const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
