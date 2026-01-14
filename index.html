@@ -1,11 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>byebye!</title>
+    <title>优质软件分享平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .software-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .software-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .software-name {
+            color: #34495e;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e6f7ff;
+        }
+
+        .software-desc {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            align-self: flex-start;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .software-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
-    <h3>链接的项目已关停!</h3>
+    <div class="container">
+        <h1 class="page-title">精选软件分享</h1>
+        <div class="software-grid" id="softwareContainer"></div>
+    </div>
+
+    <script>
+        // 1. 定义软件信息数组，存储软件名称和对应的下载链接
+        const softwareList = [
+            {
+                name: "华润证书服务客户端",
+                downloadLink: "https://sia-update.crc.com.cn/app/file/sia/index.html",
+                description: "结合基于国密算法的签名验签的技术，为用户签发专属软证书，再结合分片密码技术，可实现统一的、高安全性的用户身份鉴别访问框架。"
+            },
+            {
+                name: "润工作 3.0",
+                downloadLink: "https://rwork.crc.com.cn/crcActivity/gxlog/index.html",
+                description: "润工作3.0手机和电脑客户端"
+            },
+            {
+                name: "Rmeet 云视频",
+                downloadLink: "https://rmeet.crc.com.cn",
+                description: "华润Rmeet会议管理平台"
+            },
+            {
+                name: "Tgent 零信任客户端",
+                downloadLink: "https://tam.taslypharma.com/",
+                description: "零信任客户端,用于访问公司内网,当前连接地址填写: tam.taslypharma.com"
+            },
+            {
+                name: "企业微信",
+                downloadLink: "https://work.weixin.qq.com",
+                description: "企业微信客户端,用于登陆天士通E站,腾讯会议等。"
+            },
+            {
+                name: "Chrome 谷歌浏览器",
+                downloadLink: "https://www.google.cn/chrome/",
+                description: "谷歌推出的高速浏览器，扩展程序丰富，同步功能强大，安全性高。"
+            }
+        ];
+
+        // 2. 获取页面中的软件容器元素
+        const softwareContainer = document.getElementById("softwareContainer");
+
+        // 3. 遍历软件数组，动态生成页面内容
+        softwareList.forEach(software => {
+            // 创建软件卡片元素
+            const card = document.createElement("div");
+            card.className = "software-card";
+
+            // 构建卡片内部HTML结构（包含软件名称、描述、下载按钮）
+            card.innerHTML = `
+                <h3 class="software-name">${software.name}</h3>
+                <p class="software-desc">${software.description}</p>
+                <button class="download-btn" data-link="${software.downloadLink}">立即下载</button>
+            `;
+
+            // 将卡片添加到容器中
+            softwareContainer.appendChild(card);
+        });
+
+        // 4. 为所有下载按钮绑定点击事件，实现跳转下载功能
+        const allDownloadBtns = document.querySelectorAll(".download-btn");
+        allDownloadBtns.forEach(btn => {
+            btn.addEventListener("click", function() {
+                // 获取存储在按钮上的下载链接
+                const downloadUrl = this.getAttribute("data-link");
+                // 跳转到软件下载页面（新标签页打开，不影响当前分享页面）
+                window.open(downloadUrl, "_blank");
+            });
+        });
+    </script>
 </body>
 </html>
