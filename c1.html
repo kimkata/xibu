@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坐标信息获取工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .location-status {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .location-status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .location-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .location-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .coordinate-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .coordinate-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .coordinate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .coordinate-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd6;
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .coordinate-value {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 15px;
+            color: #555;
+            line-height: 1.8;
+            word-break: break-all;
+        }
+
+        .coordinate-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .coordinate-label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .coordinate-num {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .refresh-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📍 坐标信息获取工具</h1>
+            <p>获取当前位置的 WGS84 / GCJ02 / BD09 坐标</p>
+        </div>
+
+        <div class="location-status" id="status">
+            <span id="status-text">正在获取位置信息...</span>
+        </div>
+
+        <div id="coordinates-container" style="display: none;">
+            <div class="coordinate-card">
+                <div class="coordinate-header">
+                    <span class="coordinate-name">🌐 WGS84 (原始坐标)</span>
+                    <button class="copy-btn" data-type="wgs84" onclick="copyCoordinate('wgs84')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        复制
+                    </button>
+                </div>
+                <div class="coordinate-value">
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">经度 (Lng):</span>
+                        <span class="coordinate-num" id="wgs84-lng">-</span>
+                    </div>
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">纬度 (Lat):</span>
+                        <span class="coordinate-num" id="wgs84-lat">-</span>
+                    </div>
+                    <div class="coordinate-item" style="font-size: 12px; color: #aaa; margin-top: 4px;">
+                        <span>格式:</span>
+                        <span id="wgs84-format">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coordinate-card">
+                <div class="coordinate-header">
+                    <span class="coordinate-name">🇨🇳 GCJ02 (国测局坐标)</span>
+                    <button class="copy-btn" data-type="gcj02" onclick="copyCoordinate('gcj02')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        复制
+                    </button>
+                </div>
+                <div class="coordinate-value">
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">经度 (Lng):</span>
+                        <span class="coordinate-num" id="gcj02-lng">-</span>
+                    </div>
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">纬度 (Lat):</span>
+                        <span class="coordinate-num" id="gcj02-lat">-</span>
+                    </div>
+                    <div class="coordinate-item" style="font-size: 12px; color: #aaa; margin-top: 4px;">
+                        <span>格式:</span>
+                        <span id="gcj02-format">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coordinate-card">
+                <div class="coordinate-header">
+                    <span class="coordinate-name">🔵 BD09 (百度坐标)</span>
+                    <button class="copy-btn" data-type="bd09" onclick="copyCoordinate('bd09')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        复制
+                    </button>
+                </div>
+                <div class="coordinate-value">
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">经度 (Lng):</span>
+                        <span class="coordinate-num" id="bd09-lng">-</span>
+                    </div>
+                    <div class="coordinate-item">
+                        <span class="coordinate-label">纬度 (Lat):</span>
+                        <span class="coordinate-num" id="bd09-lat">-</span>
+                    </div>
+                    <div class="coordinate-item" style="font-size: 12px; color: #aaa; margin-top: 4px;">
+                        <span>格式:</span>
+                        <span id="bd09-format">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="refresh-btn" onclick="getLocation()">
+                🔄 重新获取位置
+            </button>
+        </div>
+
+        <div class="footer">
+            提示：点击复制按钮可将坐标复制到剪贴板，方便发送给聊天窗口
+        </div>
+    </div>
+
+    <script>
+        const PI = Math.PI;
+        const a = 6378245.0;
+        const ee = 0.00669342162296594323;
+
+        function transformLat(x, y) {
+            let ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+            ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+            ret += (20.0 * Math.sin(y * PI) + 40.0 * Math.sin(y / 3.0 * PI)) * 2.0 / 3.0;
+            ret += (160.0 * Math.sin(y / 12.0 * PI) + 320 * Math.sin(y * PI / 30.0)) * 2.0 / 3.0;
+            return ret;
+        }
+
+        function transformLng(x, y) {
+            let ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+            ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+            ret += (20.0 * Math.sin(x * PI) + 40.0 * Math.sin(x / 3.0 * PI)) * 2.0 / 3.0;
+            ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0;
+            return ret;
+        }
+
+        function outOfChina(lng, lat) {
+            return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
+        }
+
+        function wgs84ToGcj02(wgsLng, wgsLat) {
+            if (outOfChina(wgsLng, wgsLat)) {
+                return { lng: wgsLng, lat: wgsLat };
+            }
+            let dLat = transformLat(wgsLng - 105.0, wgsLat - 35.0);
+            let dLng = transformLng(wgsLng - 105.0, wgsLat - 35.0);
+            let radLat = wgsLat / 180.0 * PI;
+            let magic = Math.sin(radLat);
+            magic = 1 - ee * magic * magic;
+            let sqrtMagic = Math.sqrt(magic);
+            dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
+            dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
+            return {
+                lng: wgsLng + dLng,
+                lat: wgsLat + dLat
+            };
+        }
+
+        function gcj02ToWgs84(gcjLng, gcjLat) {
+            if (outOfChina(gcjLng, gcjLat)) {
+                return { lng: gcjLng, lat: gcjLat };
+            }
+            let dLat = transformLat(gcjLng - 105.0, gcjLat - 35.0);
+            let dLng = transformLng(gcjLng - 105.0, gcjLat - 35.0);
+            let radLat = gcjLat / 180.0 * PI;
+            let magic = Math.sin(radLat);
+            magic = 1 - ee * magic * magic;
+            let sqrtMagic = Math.sqrt(magic);
+            dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
+            dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
+            return {
+                lng: gcjLng - dLng,
+                lat: gcjLat - dLat
+            };
+        }
+
+        function gcj02ToBd09(gcjLng, gcjLat) {
+            let x = gcjLng;
+            let y = gcjLat;
+            let z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * PI * 3000.0 / 180.0);
+            let theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * PI * 3000.0 / 180.0);
+            return {
+                lng: z * Math.cos(theta) + 0.0065,
+                lat: z * Math.sin(theta) + 0.006
+            };
+        }
+
+        function bd09ToGcj02(bdLng, bdLat) {
+            let x = bdLng - 0.0065;
+            let y = bdLat - 0.006;
+            let z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * PI * 3000.0 / 180.0);
+            let theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * PI * 3000.0 / 180.0);
+            return {
+                lng: z * Math.cos(theta),
+                lat: z * Math.sin(theta)
+            };
+        }
+
+        function wgs84ToBd09(wgsLng, wgsLat) {
+            let gcj = wgs84ToGcj02(wgsLng, wgsLat);
+            return gcj02ToBd09(gcj.lng, gcj.lat);
+        }
+
+        function bd09ToWgs84(bdLng, bdLat) {
+            let gcj = bd09ToGcj02(bdLng, bdLat);
+            return gcj02ToWgs84(gcj.lng, gcj.lat);
+        }
+
+        function formatCoordinate(lng, lat) {
+            return `${lng.toFixed(6)}, ${lat.toFixed(6)}`;
+        }
+
+        function updateStatus(status, text) {
+            const statusEl = document.getElementById('status');
+            const statusText = document.getElementById('status-text');
+            statusEl.className = `location-status ${status}`;
+            statusText.textContent = text;
+        }
+
+        function displayCoordinates(wgs84, gcj02, bd09) {
+            document.getElementById('wgs84-lng').textContent = wgs84.lng.toFixed(6);
+            document.getElementById('wgs84-lat').textContent = wgs84.lat.toFixed(6);
+            document.getElementById('wgs84-format').textContent = formatCoordinate(wgs84.lng, wgs84.lat);
+
+            document.getElementById('gcj02-lng').textContent = gcj02.lng.toFixed(6);
+            document.getElementById('gcj02-lat').textContent = gcj02.lat.toFixed(6);
+            document.getElementById('gcj02-format').textContent = formatCoordinate(gcj02.lng, gcj02.lat);
+
+            document.getElementById('bd09-lng').textContent = bd09.lng.toFixed(6);
+            document.getElementById('bd09-lat').textContent = bd09.lat.toFixed(6);
+            document.getElementById('bd09-format').textContent = formatCoordinate(bd09.lng, bd09.lat);
+
+            document.getElementById('coordinates-container').style.display = 'block';
+        }
+
+        function getLocation() {
+            updateStatus('loading', '正在获取位置信息...');
+            document.getElementById('coordinates-container').style.display = 'none';
+
+            if (!navigator.geolocation) {
+                updateStatus('error', '您的浏览器不支持地理位置功能');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const wgs84 = {
+                        lng: position.coords.longitude,
+                        lat: position.coords.latitude
+                    };
+                    const gcj02 = wgs84ToGcj02(wgs84.lng, wgs84.lat);
+                    const bd09 = gcj02ToBd09(gcj02.lng, gcj02.lat);
+
+                    updateStatus('success', '位置获取成功');
+                    displayCoordinates(wgs84, gcj02, bd09);
+                },
+                function(error) {
+                    let errorMsg = '位置获取失败';
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg = '请允许获取位置权限';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg = '位置信息不可用';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg = '获取位置超时';
+                            break;
+                    }
+                    updateStatus('error', errorMsg);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        async function copyCoordinate(type) {
+            const lng = document.getElementById(`${type}-lng`).textContent;
+            const lat = document.getElementById(`${type}-lat`).textContent;
+            const text = formatCoordinate(parseFloat(lng), parseFloat(lat));
+
+            try {
+                await navigator.clipboard.writeText(text);
+                const btn = document.querySelector(`.copy-btn[data-type="${type}"]`);
+                btn.classList.add('copied');
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    已复制
+                `;
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        复制
+                    `;
+                }, 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            }
+        }
+
+        window.onload = getLocation;
+    </script>
+</body>
+</html>
